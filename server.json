@@ -1,16 +1,15 @@
 {
     "variables": {
-        "client_id": "a7655f1f-d844-42d0-ba9b-b9b22bdc4541",
-        "client_secret": "IuU8Q~qFkTGFzx4lxt~J5mYy7DqZvzaUccth5bBY",
-        "subscription_id": "7de72e36-dc87-4e3f-aa67-6dacbc9993c6",
+        "client_id": "88ec9bf6-4693-4714-99e8-56cadc668795",
+        "client_secret": "n578Q~sdz-qT7YADVEQRBGZZ8iT1hyav6HOj_a4N",
+        "subscription_id": "46f0b4f7-e5d8-488c-b438-00f74a74c84a",
         "tenant_id": "f958e84a-92b8-439f-a62d-4f45996b6d07"
     },
     "builders": [{
       "type": "azure-arm",
-  
-      "client_id": "a7655f1f-d844-42d0-ba9b-b9b22bdc4541",
-      "client_secret": "IuU8Q~qFkTGFzx4lxt~J5mYy7DqZvzaUccth5bBY",
-      "subscription_id": "7de72e36-dc87-4e3f-aa67-6dacbc9993c6",
+      "client_id": "88ec9bf6-4693-4714-99e8-56cadc668795",
+      "client_secret": "n578Q~sdz-qT7YADVEQRBGZZ8iT1hyav6HOj_a4N",
+      "subscription_id": "46f0b4f7-e5d8-488c-b438-00f74a74c84a",
   
       "os_type": "Linux",
       "image_publisher": "Canonical",
@@ -27,9 +26,15 @@
         }
     }],
     "provisioners": [{
+        "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
         "inline": [
+            "apt-get update",
+            "apt-get upgrade -y",
+            "apt-get -y install nginx",
             "echo 'Hello, World!' > index.html",
-            "nohup busybox httpd -f -p 80 &"
+            "nohup busybox httpd -f -p 80 &",
+            "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+
         ],
         "inline_shebang": "/bin/sh -x",
         "type": "shell"
